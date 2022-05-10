@@ -8,10 +8,12 @@ namespace MyProjectAPI.Controllers
   public class AuthController : ControllerBase
   {
     private readonly IAuthService _authService;
+    private readonly IUserService _userService;
 
-    public AuthController(IAuthService authenticationService)
+    public AuthController(IAuthService authenticationService, IUserService userService)
     {
       _authService = authenticationService;
+      _userService = userService;
     }
 
     [HttpPost("register")]
@@ -40,10 +42,15 @@ namespace MyProjectAPI.Controllers
       return Ok(token);
     }
 
-    [HttpGet("test"), Authorize(Roles = "Admin")]
-    public ActionResult<string> Get()
+    [HttpGet("get-user-by-id"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<User>> GetUserById(int id)
     {
-      return Ok("OK");
+      var user = await _userService.GetUserByIdAsync(id);
+
+      if (user == null)
+        return BadRequest("Wrong Id");
+
+      return Ok(user);
     }
   }
 }

@@ -4,6 +4,6 @@ namespace MyProjectAPI.Services.UserService
 {
   public interface IUserService
   {
-    Task<User> GetUserByUsername(string username);
+    Task<User?> GetUserByIdAsync(int id);
   }
 }

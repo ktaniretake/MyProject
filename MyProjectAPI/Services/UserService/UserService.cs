@@ -4,9 +4,18 @@ namespace MyProjectAPI.Services.UserService
 {
   public class UserService : IUserService
   {
-    public Task<User> GetUserByUsername(string username)
+    private readonly DataContext _context;
+
+    public UserService(DataContext context)
     {
-      throw new NotImplementedException();
+      _context = context;
+    }
+    public async Task<User?> GetUserByIdAsync(int id)
+    {
+      var user = await _context.Users.FindAsync(id);
+
+      await _context.SaveChangesAsync();
+      return user;
     }
   }
 }
